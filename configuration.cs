@@ -57,6 +57,17 @@ public partial class _Owin
             handler.Run((IOwinContext ctx) => { return _Owin.CatchAll(ctx, Auth.Users.List); });
         });
 
+        host.MapAndLog("/auth/filter", (handler) =>
+        {
+            handler.Run((IOwinContext ctx) => { return _Owin.CatchAll(ctx, Auth.Users.Filter); });
+        });
+
+
+        host.MapAndLog("/users/createledger", (handler) =>
+        {
+            handler.Run((IOwinContext ctx) => { return _Owin.CatchAll(ctx, Auth.Users.CreateLedger); });
+        });
+
         host.MapAndLog("/auth/create", (handler) =>
         {
             handler.Run((IOwinContext ctx) => { return _Owin.CatchAll(ctx, Auth.Users.Create); });

@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
- 
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -182,6 +181,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BackgroundJobServer.cs" />
+    <Compile Include="Controllers\FilterController.cs" />
     <Compile Include="Controllers\LogsController.cs" />
     <Compile Include="Controllers\RouletController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -2702,6 +2702,7 @@
     <Content Include="www\i\sidebar_toggler_icon_light2.png" />
     <Content Include="www\js\app.js" />
     <Content Include="www\js\cookie.js" />
+    <Content Include="www\js\filter.js" />
     <Content Include="www\js\games.js" />
     <Content Include="www\js\helpers.js" />
     <Content Include="www\js\jquery-1.9.1.min.js" />
@@ -2893,6 +2894,7 @@
     <Content Include="Views\Roulet\game.cshtml" />
     <Content Include="Views\Users\forgot.cshtml" />
     <Content Include="Views\Users\binded.cshtml" />
+    <Content Include="Views\Filter\filter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2933,7 +2935,6 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

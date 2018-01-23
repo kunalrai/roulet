@@ -177,7 +177,17 @@
                                 <span class="selected"></span>
                                 <span class="arrow open"></span>
                             </a>
+                     
                         </li>
+                    <li class="nav-item   @{if(controllerName == "filter") { @activeCss; } }">
+                        <a href="/filter/filter/" class="nav-link nav-toggle">
+                            <i class="icon-fire"></i>
+                            <span class="title">Filter</span>
+                            <span class="selected"></span>
+                            <span class="arrow open"></span>
+                        </a>
+
+                    </li>
                     <li class="nav-item   @{if(controllerName == "logs") { @activeCss; } }">
                         <a href="/logs/index/" class="nav-link nav-toggle">
                             <i class="icon-trophy"></i>
@@ -269,9 +279,17 @@
         <!-- BEGIN PAGE LEVEL SCRIPTS -->
         @{
        
-            if ((actionName == "all") && (controllerName == "users")){
+            if ((actionName == "all" ) && (controllerName == "users" )){
                 <script src="~/www/js/users.js?@date;" type="text/javascript"></script>
             }
+
+            else if (actionName == "filter" && controllerName == "filter")
+            {
+                <script src="~/www/js/filter.js?@date;" type="text/javascript"></script>
+               
+
+            }
+
             else if (((actionName == "_add") || ((actionName == "_update")) || ((actionName == "_update_main")) || ((actionName == "_update_user"))) && (controllerName == "users"))
             {
                 <script src="~/www/js/profile.js?@date;" type="text/javascript"></script>

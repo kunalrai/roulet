@@ -38,6 +38,7 @@ namespace database
                    INSERT INTO [dbo].[users](id, name, email, password, access_level, pin, ref, main,PointUser,PhoneNumber,Commision,Address,StateId,DistrictId)
                                       VALUES(@id, @name, @email, @password , @access_level, @pin, @ref, @main,@pointuser,@phonenumber,@commission,@address,@stateid,@districtid)
                 END
+               exec create_ledger @id,0,@pointuser,0;
             ";
 
             query.Parameters.Add("id", id);
@@ -71,7 +72,7 @@ namespace database
         {
 
             SQL query = @"
-             IF NOT EXISTS(SELECT * FROM [dbo].[users] WHERE [email] = @email AND [id] != @id)
+             IF  EXISTS(SELECT * FROM [dbo].[users] WHERE [email] = @email AND [id] = @id)
                 BEGIN
                     UPDATE [dbo].[users] 
                     SET [name] = @name
@@ -189,6 +190,88 @@ namespace database
                         user["access_level"] = Access_Level[reader.GetInt32(3)];
                     }
 
+
+                    usersList.Add(user);
+
+                }
+
+                usersResponse["data"] = usersList;
+
+                return usersResponse;
+
+            });
+        }
+
+
+
+        public static JObject Filter(int? state,int? districtid, int? access_level)
+        {
+
+            SQL query = @"
+                    SELECT u.[id]
+          ,[name]
+          ,[email]
+          ,[access_level],(Select name from Users  uu where uu.id = u.ref) as ManagerName,
+			current_bal,balance_date,
+          (Select name from Users  uu where uu.id = u.main) as Main
+          FROM [dbo].[users] u
+
+			left join (select * from
+			( select   ROW_NUMBER() OVER(PARTITION BY userid ORDER BY balance_date desc) 
+				AS Rownum , * from ledger  ) t
+				Where 
+				rownum =1) l 
+			on l.userid = u.id
+           where stateid = @state and districtid = @districtid and access_level = @access_level
+           order by balance_date desc
+            ";
+
+            query.Parameters.Add("state", state);
+            query.Parameters.Add("districtid", districtid);
+            query.Parameters.Add("access_level", access_level);
+
+            return query.ExecuteQuery<JObject>((reader) => {
+
+                JObject usersResponse = new JObject();
+
+                JArray usersList = new JArray();
+
+                while (reader.Read())
+                {
+
+                    JObject user = new JObject();
+
+                    if (!reader.IsDBNull(0))
+                    {
+                        user["id"] = reader.GetGuid(0);
+                    }
+
+                    if (!reader.IsDBNull(1))
+                    {
+                        user["name"] = reader.GetString(1);
+                    }
+
+                    if (!reader.IsDBNull(2))
+                    {
+                        user["email"] = reader.GetString(2);
+                    }
+
+                    if (!reader.IsDBNull(3))
+                    {
+                        user["access_level"] = Access_Level[reader.GetInt32(3)];
+                    }
+                    if (!reader.IsDBNull(4))
+                    {
+                        user["ManagerName"] = reader.GetString(4);
+                    }
+                    if (!reader.IsDBNull(5))
+                    {
+                        user["current_bal"] = reader.GetInt32(5);
+                    }
+                    if (!reader.IsDBNull(7))
+                    {
+                        user["Main"] = reader.GetString(7);
+                    }
 
                     usersList.Add(user);
 
@@ -482,7 +565,7 @@ namespace database
         public static List<SelectListItem> GetDistrictByState(int stateid)
         {
             SQL query = @"
-                select districtid,stateid,district from district where stateid=@stateid
+                select districtid,stateid,district from adminchik.district where stateid=@stateid
             ";
             query.Parameters.Add("stateid", stateid);
 
@@ -510,6 +593,22 @@ namespace database
                 return list;
             });
         }
+
+
+        public static bool CreateLedger(string userid,int credit,int debit)
+        {
+            SQL query = @"exec create_ledger @userid,@credit,@debit";
+            query.Parameters.Add("userid", userid);
+            query.Parameters.Add("credit", credit);
+            query.Parameters.Add("debit", debit);
+
+            int result = query.Execute(true);
+
+            return true;
+
+        }
+
+
 
     }
 

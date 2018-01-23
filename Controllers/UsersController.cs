@@ -70,6 +70,7 @@ namespace crm.Controllers
 
         }
 
+       
         public ActionResult _update(Guid? id = null) {
             
             if(Validator.GetGuid(id) != null) {
@@ -371,6 +372,11 @@ namespace crm.Controllers
         {
             Random random = new Random(6);
             return random.Next();
+        }
+
+        public ActionResult profile(string userid)
+        {
+            return View();
         }
         
     }

@@ -198,5 +198,47 @@ namespace Auth
             path = path.Replace(".", "");
             return path.Substring(0, 8);
         }
+
+        public static Task Filter(IOwinContext ctx)
+        {
+            if (!Authentication.Check(ctx))
+            {
+                return ctx.Error(403);
+            }
+
+            int? state = Convert.ToInt32(ctx.Parametr("state"));
+            int? districtid = Convert.ToInt32(ctx.Parametr("districtid"));
+            int? access_level = Convert.ToInt32(ctx.Parametr("access_level"));
+
+
+            if (state == null)
+            {
+
+                state = 0;
+
+            }
+
+            JObject users = database.Users.Filter(state,districtid, access_level);
+
+            return ctx.JSON(users);
+        }
+
+        public static Task CreateLedger(IOwinContext ctx)
+        {
+            if (!Authentication.Check(ctx))
+            {
+                return ctx.Error(403);
+            }
+
+            string userid = Convert.ToString(ctx.Parametr("userid"));
+            int credit = Convert.ToInt32(ctx.Parametr("credit"));
+            int debit = Convert.ToInt32(ctx.Parametr("debit"));
+
+            var result = database.Users.CreateLedger(userid, credit, debit);
+
+
+            return ctx.JSON(result);
+
+        }
     }
 }
