@@ -374,10 +374,7 @@ namespace crm.Controllers
             return random.Next();
         }
 
-        public ActionResult profile(string userid)
-        {
-            return View();
-        }
+       
         
     }
 }

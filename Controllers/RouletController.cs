@@ -20,5 +20,10 @@ namespace crm.Controllers
             return View();
 
         }
+
+        public ActionResult profile(string userid)
+        {
+            return View();
+        }
     }
 }

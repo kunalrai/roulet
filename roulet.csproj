@@ -2895,6 +2895,7 @@
     <Content Include="Views\Users\forgot.cshtml" />
     <Content Include="Views\Users\binded.cshtml" />
     <Content Include="Views\Filter\filter.cshtml" />
+    <Content Include="Views\Roulet\profile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
